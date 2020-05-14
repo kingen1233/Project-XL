@@ -7,19 +7,27 @@ import java.util.Map;
 
 import util.XLException;
 
-//TODO move to another package
 public class XLBufferedReader extends BufferedReader {
     public XLBufferedReader(String name) throws FileNotFoundException {
         super(new FileReader(name));
     }
 
-    // TODO Change Object to something appropriate
-    public void load(Map<String, Object> map) {
+    public void load(Map<String, SlotData> map) {
         try {
+        	SlotDataFactory factory = new SlotDataFactory();
+        	String string;
+        	String address;
+        	String value;
+        	int index;      	
+        	
             while (ready()) {
-                String string = readLine();
-                int i = string.indexOf('=');
-                // TODO
+                string = readLine();//whole line
+                index = string.indexOf('=');
+                
+                address = string.substring(0, index); //Split line into address and value
+                value = string.substring(index+1, string.length());                
+                map.put(address, factory.getSlotType(value));
+                
             }
         } catch (Exception e) {
             throw new XLException(e.getMessage());
