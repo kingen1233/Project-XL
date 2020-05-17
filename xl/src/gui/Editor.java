@@ -6,14 +6,21 @@ import java.util.Observer;
 
 import javax.swing.JTextField;
 
+import model.Model;
+
 public class Editor extends JTextField implements Observer{
-    public Editor() {
+	private CurrentSlot selected;
+	private Model XLsheet;
+    public Editor(CurrentSlot selected, Model XLsheet) {
         setBackground(Color.WHITE);
+        this.selected = selected;
+        this.XLsheet = XLsheet;
+        selected.addObserver(this);
     }
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		SetText(XLsheet.. /*behöver kunna returna en sträng ifrån en address*/))
 		
 	}
 }
