@@ -6,21 +6,22 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
 
+import gui.CurrentSlot;
 import model.Model;
 
 class ClearMenuItem extends JMenuItem implements ActionListener {
 
 	private Model model;
-	private String adress;
+	private CurrentSlot currentSlot;
 
-	public ClearMenuItem(String adress, Model model) {
+	public ClearMenuItem(CurrentSlot currentSlot, Model model) {
 		super("Clear");
 		addActionListener(this);
 		this.model = model;
-		this.adress = adress;
+		this.currentSlot = currentSlot;
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		model.clearCell(adress);
+		model.clearCell(currentSlot.address());
 	}
 }

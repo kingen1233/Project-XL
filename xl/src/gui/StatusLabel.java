@@ -4,19 +4,17 @@ import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 
+import model.ExceptionController;
 import model.Model;
 
 public class StatusLabel extends ColoredLabel implements Observer {
 	
-	Model XLsheet;
 	
-    public StatusLabel(Model XLsheet) {
+    public StatusLabel() {
         super("", Color.WHITE);
-        this.XLsheet = XLsheet;
-        XLsheet.addObserver(this);
     }
 
     public void update(Observable observable, Object object) {
-    	setText(XLsheet. /*Känner att någon metod i Model borde hantera exceptions, inte exceptioncontroller*/);
+    	this.setText((String) object);
     }
 }

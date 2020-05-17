@@ -4,6 +4,7 @@ import static java.awt.BorderLayout.CENTER;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
 import gui.menu.XLMenuBar;
+import model.ExceptionController;
 import model.Model;
 
 import java.awt.Graphics;
@@ -18,9 +19,11 @@ import javax.swing.JPanel;
 public class XL extends JFrame implements Printable {
     private static final int ROWS = 10, COLUMNS = 8;
     private XLCounter counter;
-    private StatusLabel statusLabel = new StatusLabel();
+    private StatusLabel statusLabel;
     private XLList xlList;
     private Model model;
+    private CurrentSlot currentSlot;
+    private ExceptionController excController;
 
     public XL(XL oldXL) {
         this(oldXL.xlList, oldXL.counter);
@@ -30,16 +33,20 @@ public class XL extends JFrame implements Printable {
         super("Untitled-" + counter);
         this.xlList = xlList;
         this.counter = counter;
+       
+        this.statusLabel = new StatusLabel();
+        this.excController = new ExceptionController(statusLabel); 
         this.model = new Model();
+        this.currentSlot = new CurrentSlot();
         xlList.add(this);
         counter.increment();
-        JPanel statusPanel = new StatusPanel(statusLabel);
-        JPanel sheetPanel = new SheetPanel(ROWS, COLUMNS);
-        Editor editor = new Editor();
+        JPanel statusPanel = new StatusPanel(statusLabel, currentSlot);
+        JPanel sheetPanel = new SheetPanel(ROWS, COLUMNS, model, currentSlot);
+        Editor editor = new Editor(currentSlot, model, excController);
         add(NORTH, statusPanel);
         add(CENTER, editor);
         add(SOUTH, sheetPanel);
-        setJMenuBar(new XLMenuBar(this, xlList, statusLabel, model));
+        setJMenuBar(new XLMenuBar(this, xlList, statusLabel, model, currentSlot));
         pack();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);

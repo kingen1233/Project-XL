@@ -13,7 +13,7 @@ public class CommentSlot implements SlotData{
 	
 	@Override
 	public double value(Environment value) {
-		throw new XLException("Blankslot has no value");
+		return 0.0;
 	}
 
 	@Override

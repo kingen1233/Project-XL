@@ -14,11 +14,11 @@ public class SlotDataFactory {
 
 	public SlotData getSlotType(String value) throws IOException {
 
-		if (value.charAt(0) == '#') {
-			return new CommentSlot(value);
-		} 
-		else if (value.equals("")) {
+		if (value.equals("")) {
 			return new BlankSlot();
+		} 
+		else if (value.charAt(0) == '#') {
+			return new CommentSlot(value);
 		} 
 		else {
 
