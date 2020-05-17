@@ -17,8 +17,7 @@ public class CurrentLabel extends ColoredLabel implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        setText(selected.toString());
-    
+        setText(selected.address());   
 		
 	}
 }

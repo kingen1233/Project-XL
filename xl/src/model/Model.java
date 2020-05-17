@@ -36,19 +36,30 @@ public class Model extends Observable implements Environment {
 			slot.value(this);
 			map.put(address, slot);
 
-		} catch (XLException xle) { //Circular slot detected
-			xle.printStackTrace();
-			
-			if (previous == null) { //if the address previously had a value, put that back
+		} catch (XLException xle) { // Circular slot detected
+
+			if (previous == null) { // if the address previously had a value, put that back
 				map.remove(address);
-			} 
-			else {
+			} else {
 				map.put(address, previous);
 			}
+
+			throw xle;
 
 		}
 
 		alertObservers();
+
+	}
+
+	public String getStringValue(String address) {
+		try {
+			SlotData slot = map.get(address);
+			return slot.stringValue();
+		} catch (NullPointerException e) {
+
+			throw new XLException("No value at address: " + address);
+		}
 
 	}
 
@@ -75,12 +86,20 @@ public class Model extends Observable implements Environment {
 			XLBufferedReader xlBufferedReader = new XLBufferedReader(path);
 			xlBufferedReader.load(map);
 			xlBufferedReader.close();
+			evaluateMap();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new XLException("Failed to load file");
 		}
 
 		alertObservers();
+	}
+	
+	private void evaluateMap() throws IOException {
+		
+		for(Entry<String, SlotData> e : map.entrySet()){
+			this.setData(e.getKey(), e.getValue().stringValue());
+		}
 	}
 
 	private void alertObservers() {
@@ -91,15 +110,23 @@ public class Model extends Observable implements Environment {
 	@Override
 	public double value(String address) {
 
-		if (map.containsKey(address)) {
-			return map.get(address).value(this);
-		} else
-			throw new XLException("No such address in map: " + address);
+		try {
+			if (map.containsKey(address)) {
+				return map.get(address).value(this);
+			}
+		} catch (XLException e) {
+			throw e;
+		}
+		
+		throw new XLException("No value found on address: " + address);
+
 	}
 
-	public Set<Entry<String, SlotData>> getEntries() {
+	public void printMap() {
 
-		return map.entrySet();
+		for (Entry<String, SlotData> e : map.entrySet()) {
+			System.out.println(e.getKey() + ", " + e.getValue().stringValue());
+		}
 	}
 
 }
