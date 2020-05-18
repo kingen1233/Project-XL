@@ -30,7 +30,7 @@ public class SlotLabel extends ColoredLabel implements Observer {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				selected.setCurrentSlot(address);
-				setBackground(Color.yellow);
+				setBackground(Color.cyan);
 				model.notifyObservers();
 			}
 
@@ -45,9 +45,12 @@ public class SlotLabel extends ColoredLabel implements Observer {
 	@Override
 	public void update(Observable arg0, Object arg1) {
 
+		System.out.println("i am in address: " + address + " and i smell like poopp");
+		
 		if (arg1 instanceof CurrentSlot) {
 
 			selected = (CurrentSlot) arg1;
+			
 			this.setBackground(Color.white);
 
 		} else if (arg1 instanceof Map) {
@@ -61,7 +64,6 @@ public class SlotLabel extends ColoredLabel implements Observer {
 				} else {
 					this.setText(Double.toString(model.value(address))); // chec if gonna use string value or not
 				}
-				selected.deleteObserver(this);
 			} catch (XLException e) {
 				this.setText("");
 			}
